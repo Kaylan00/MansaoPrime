@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+// ============================================
+// VARIABLES
+// ============================================
+$color-primary: #1A1A1A;
+$color-gold: #C6A962;
+$color-gold-light: #D4BC7C;
+$color-gold-dark: #A8894A;
+$color-body: #555555;
+$color-muted: #9F9E9E;
+$color-light: #F4F4F4;
+$color-lighter: #F7F7F7;
+$color-border: #E0E0E0;
+$color-dark-border: #313131;
+
+$font-montserrat: "Montserrat", sans-serif;
+$font-lora: "Lora", serif;
+
+$transition-base: all 0.3s ease;
+$transition-slow: all 0.6s ease;
+
+// ============================================
+// TAILWIND THEME
+// ============================================
+@theme {
+  --color-primary: #{$color-primary};
+  --color-gold: #{$color-gold};
+  --color-gold-light: #{$color-gold-light};
+  --color-gold-dark: #{$color-gold-dark};
+  --color-body: #{$color-body};
+  --color-muted: #{$color-muted};
+  --color-light: #{$color-light};
+  --color-lighter: #{$color-lighter};
+  --color-border: #{$color-border};
+  --color-dark-border: #{$color-dark-border};
+  --font-montserrat: #{$font-montserrat};
+  --font-lora: #{$font-lora};
+}
+
+// ============================================
+// MIXINS
+// ============================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin uppercase-label($size: 14px, $spacing: 2px) {
+  font-size: $size;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: $spacing;
+}
+
+@mixin responsive($breakpoint) {
+  @if $breakpoint == md {
+    @media (min-width: 768px) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: 1024px) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: 1280px) { @content; }
+  }
+}
+
+@mixin button-base {
+  display: inline-block;
+  padding: 14px 36px;
+  @include uppercase-label(13px, 1px);
+  border: 2px solid $color-gold;
+  transition: $transition-base;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid $color-gold;
+    outline-offset: 2px;
+  }
+}
+
+// ============================================
+// BASE
+// ============================================
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: $font-montserrat;
+  color: $color-body;
+  overflow-x: hidden;
+}
+
+// ============================================
+// SCROLLBAR
+// ============================================
+::-webkit-scrollbar {
+  width: 8px;
+
+  &-track {
+    background: $color-light;
+  }
+
+  &-thumb {
+    background: $color-gold;
+    border-radius: 4px;
+  }
+}
+
+// ============================================
+// PRELOADER
+// ============================================
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: $color-primary;
+  @include flex-center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+
+  &.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.preloader-bar {
+  width: 200px;
+  height: 2px;
+  background: #333;
+  border-radius: 2px;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: $color-gold;
+    animation: preloader-slide 1.2s ease-in-out infinite;
+  }
+}
+
+@keyframes preloader-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+// ============================================
+// SECTION LABEL (bracket style)
+// ============================================
+.section-label {
+  @include uppercase-label(14px, 2px);
+  color: $color-gold;
+
+  &::before { content: '[ '; }
+  &::after { content: ' ]'; }
+}
+
+// ============================================
+// HEADING WITH DOTS
+// ============================================
+.heading-dots {
+  position: relative;
+  padding-bottom: 20px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66px;
+    border-bottom: 3px dotted $color-gold;
+  }
+
+  &.left::after {
+    left: 0;
+    transform: none;
+  }
+}
+
+// ============================================
+// IMAGE HOVER SCALE
+// ============================================
+.img-hover-scale {
+  overflow: hidden;
+
+  img {
+    transition: transform 0.6s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.08);
+  }
+}
+
+// ============================================
+// BUTTONS
+// ============================================
+.btn-gold {
+  @include button-base;
+  color: $color-gold;
+  background: transparent;
+
+  &:hover {
+    background: $color-gold;
+    color: #fff;
+  }
+}
+
+.btn-gold-filled {
+  @include button-base;
+  color: #fff;
+  background: $color-gold;
+
+  &:hover {
+    background: $color-gold-dark;
+    border-color: $color-gold-dark;
+  }
+}
+
+// ============================================
+// PROPERTY CARD OVERLAY
+// ============================================
+.property-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba($color-primary, 0.85) 0%,
+    rgba($color-primary, 0) 60%
+  );
+  opacity: 1;
+  transition: opacity 0.4s ease;
+
+  @include responsive(md) {
+    opacity: 0;
+
+    .property-card:hover & {
+      opacity: 1;
+    }
+  }
+}
+
+// ============================================
+// LINK UNDERLINE ANIMATION
+// ============================================
+.link-underline {
+  background-image: linear-gradient($color-gold, $color-gold);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  transition: background-size 0.3s ease;
+
+  &:hover {
+    background-size: 100% 2px;
+  }
+}
+
+// ============================================
+// COUNTER NUMBER
+// ============================================
+.counter-number {
+  font-size: 36px;
+  font-weight: 700;
+  color: $color-primary;
+  line-height: 1;
+
+  @include responsive(md) {
+    font-size: 56px;
+  }
+}
+
+// ============================================
+// SWIPER CUSTOMIZATION
+// ============================================
+.swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+  background: #fff !important;
+  opacity: 0.5 !important;
+  transition: $transition-base !important;
+
+  &-active {
+    opacity: 1 !important;
+    background: $color-gold !important;
+    transform: scale(1.2);
+  }
+}
