@@ -1,33 +1,37 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Phone, Search, ChevronDown, Bed, Bath, Maximize2, MapPin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { properties } from "@/lib/data";
 
-const navLinks = [
-  { name: "Início", href: "#home" },
-  { name: "Sobre", href: "#about" },
-  {
-    name: "Imóveis",
-    href: "#properties",
-    submenu: [
-      "Mansões",
-      "Coberturas",
-      "Apartamentos",
-      "Casas de Campo",
-      "Villas",
-      "Terrenos",
-    ],
-  },
-  { name: "Bairros", href: "#neighborhoods" },
-  { name: "Depoimentos", href: "#testimonials" },
-  { name: "Contato", href: "#contact" },
+const submenuItems = [
+  { label: "Mansões",       tipo: "Mansão" },
+  { label: "Coberturas",    tipo: "Cobertura" },
+  { label: "Apartamentos",  tipo: "Apartamento" },
+  { label: "Casas de Campo",tipo: "Casa de Campo" },
+  { label: "Villas",        tipo: "Villa" },
+  { label: "Terrenos",      tipo: "Terreno" },
 ];
 
-export default function Header() {
+const navLinks = [
+  { name: "Início", href: "/#home" },
+  { name: "Sobre", href: "/#about" },
+  {
+    name: "Imóveis",
+    href: "/imoveis",
+    submenu: submenuItems,
+  },
+  { name: "Bairros", href: "/#neighborhoods" },
+  { name: "Depoimentos", href: "/#testimonials" },
+  { name: "Contato", href: "/#contact" },
+];
+
+export default function Header({ noDelay = false }: { noDelay?: boolean }) {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
@@ -73,7 +77,7 @@ export default function Header() {
         }`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.6, delay: 2 }}
+        transition={{ duration: 0.6, delay: noDelay ? 0 : 2 }}
       >
         <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
@@ -97,13 +101,15 @@ export default function Header() {
                 }
                 onMouseLeave={() => setActiveSubmenu(null)}
               >
-                <a
+                <Link
                   href={link.href}
-                  className="text-[13px] font-semibold uppercase tracking-[1px] text-white/80 hover:text-gold transition-colors duration-300 flex items-center gap-1"
+                  className={`text-[13px] font-semibold uppercase tracking-[1px] transition-colors duration-300 flex items-center gap-1 ${
+                    pathname === link.href ? "text-gold" : "text-white/80 hover:text-gold"
+                  }`}
                 >
                   {link.name}
                   {link.submenu && <ChevronDown size={12} />}
-                </a>
+                </Link>
                 {link.submenu && (
                   <AnimatePresence>
                     {activeSubmenu === link.name && (
@@ -116,13 +122,14 @@ export default function Header() {
                       >
                         <div className="bg-primary/95 backdrop-blur-md border border-dark-border p-4 min-w-[200px]">
                           {link.submenu.map((item) => (
-                            <a
-                              key={item}
-                              href="#properties"
+                            <Link
+                              key={item.tipo}
+                              href={`/imoveis?tipo=${encodeURIComponent(item.tipo)}`}
+                              onClick={() => setActiveSubmenu(null)}
                               className="block py-2 px-3 text-[13px] text-white/70 hover:text-gold hover:bg-white/5 transition-all duration-200"
                             >
-                              {item}
-                            </a>
+                              {item.label}
+                            </Link>
                           ))}
                         </div>
                       </motion.div>
@@ -288,14 +295,16 @@ export default function Header() {
             >
               <nav className="flex flex-col gap-1">
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.name}
                     href={link.href}
-                    className="text-[15px] font-semibold uppercase tracking-[1px] text-white/80 hover:text-gold transition-colors py-3 border-b border-dark-border"
+                    className={`text-[15px] font-semibold uppercase tracking-[1px] transition-colors py-3 border-b border-dark-border block ${
+                      pathname === link.href ? "text-gold" : "text-white/80 hover:text-gold"
+                    }`}
                     onClick={() => setMobileOpen(false)}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 ))}
               </nav>
               <div className="mt-8 pt-8 border-t border-dark-border space-y-4">

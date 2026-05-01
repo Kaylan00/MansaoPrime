@@ -23,14 +23,13 @@ const socialLinks = [
 ];
 
 const propertyTypes = [
-  "Mansões",
-  "Coberturas",
-  "Apartamentos",
-  "Casas de Campo",
-  "Villas",
-  "Terrenos Premium",
-  "Imóveis Comerciais",
-  "Lançamentos",
+  { label: "Mansões",          tipo: "Mansão" },
+  { label: "Coberturas",       tipo: "Cobertura" },
+  { label: "Apartamentos",     tipo: "Apartamento" },
+  { label: "Casas de Campo",   tipo: "Casa de Campo" },
+  { label: "Villas",           tipo: "Villa" },
+  { label: "Terrenos",         tipo: "Terreno" },
+  { label: "Ver Todos",        tipo: "" },
 ];
 
 const regions = [
@@ -115,14 +114,14 @@ export default function Footer() {
               Tipos de Imóveis
             </h4>
             <ul className="space-y-2">
-              {propertyTypes.map((type) => (
-                <li key={type}>
-                  <a
-                    href="#properties"
+              {propertyTypes.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.tipo ? `/imoveis?tipo=${encodeURIComponent(item.tipo)}` : "/imoveis"}
                     className="text-[14px] text-white/50 hover:text-gold transition-colors duration-200"
                   >
-                    {type}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>

@@ -109,7 +109,7 @@ export default function Hero() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
               >
-                <a href="#properties" className="btn-gold-filled">
+                <a href="/imoveis" className="btn-gold-filled">
                   Ver Imóveis
                 </a>
                 <a href="#contact" className="btn-gold">

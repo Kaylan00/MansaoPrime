@@ -137,7 +137,7 @@ export default function Properties() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <a href="#contact" className="btn-gold">
+          <a href="/imoveis" className="btn-gold">
             Ver Todos os Imóveis
           </a>
         </motion.div>
